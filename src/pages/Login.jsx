@@ -39,7 +39,7 @@ function Login() {
 
     
 
-    navigate("/");
+    navigate("/dashboard");
   };
 
   return (
