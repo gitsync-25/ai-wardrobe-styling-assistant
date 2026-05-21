@@ -1,6 +1,54 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "../supabase";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+
+const [username, setUsername] = useState("");
+
+const [email, setEmail] = useState("");
+
+const [password, setPassword] = useState("");
+
+const [loading, setLoading] = useState(false);
+
+const handleRegister = async (e) => {
+
+  e.preventDefault();
+
+  setLoading(true);
+
+  const { data, error } =
+    await supabase.auth.signUp({
+
+      email,
+
+      password,
+
+      options: {
+
+        data: {
+          username,
+        },
+
+      },
+
+    });
+
+  setLoading(false);
+
+  if (error) {
+
+    alert(error.message);
+
+    return;
+  }
+
+  navigate("/login");
+
+};
   return (
     <div className="login-page">
 
@@ -14,25 +62,56 @@ function Register() {
         <p>
           Join the future of AI fashion styling.
         </p>
+<form onSubmit={handleRegister}>
+        <input
+  type="text"
+  placeholder="Enter your username"
+
+  value={username}
+
+  onChange={(e) =>
+    setUsername(e.target.value)
+  }
+
+  required
+/>
 
         <input
-          type="text"
-          placeholder="Enter your username"
-        />
+  type="email"
+  placeholder="Enter your email"
 
-        <input
-          type="email"
-          placeholder="Enter your email"
-        />
+  value={email}
 
-        <input
-          type="password"
-          placeholder="Create password"
-        />
+  onChange={(e) =>
+    setEmail(e.target.value)
+  }
 
-        <button>
-          Register
-        </button>
+  required
+/>
+
+       <input
+  type="password"
+  placeholder="Create password"
+
+  value={password}
+
+  onChange={(e) =>
+    setPassword(e.target.value)
+  }
+
+  required
+/>
+
+        <button type="submit">
+
+  {
+    loading
+      ? "Creating..."
+      : "Register"
+  }
+
+</button>
+        </form>
 
         <span>
           Already have an account?
