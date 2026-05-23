@@ -1713,17 +1713,21 @@ pointer-events: none;
 
 .upload-box {
 
-  margin-top: 40px;
+  border:
+    2px dashed rgba(255,255,255,0.15);
+
+  border-radius: 24px;
 
   padding: 40px;
 
-  border: 2px dashed rgba(255,255,255,0.2);
+  margin-top: 30px;
 
-  border-radius: 20px;
+  background:
+    rgba(255,255,255,0.03);
+
+  backdrop-filter: blur(12px);
 
   text-align: center;
-
-  background: rgba(255,255,255,0.03);
 }
 
 .upload-box input {
@@ -1841,4 +1845,123 @@ pointer-events: none;
 
   border-radius: 12px;
 }
+
+.outfit-score {
+
+  position: absolute;
+
+  top: 10px;
+
+  left: 10px;
+
+  background: #9b5cff;
+
+  padding: 6px 12px;
+
+  border-radius: 12px;
+
+  font-size: 0.9rem;
+
+  color: white;
+}
+
+.outfit-card {
+
+  position: relative;
+}
+.filter-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  margin: 20px 0;
+
+  flex-wrap: wrap;
+}
+
+.filter-buttons button {
+
+  background: rgba(255,255,255,0.08);
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  color: white;
+
+  padding: 10px 18px;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+  font-weight: 600;
+}
+
+.filter-buttons button:hover {
+
+  background: #9b5cff;
+
+  transform: translateY(-2px);
+}
+
+.category-select {
+
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  padding: 10px 14px;
+
+  border-radius: 12px;
+
+  margin-right: 12px;
+
+  outline: none;
+}
+
+.category-select option {
+
+  background: #df3a77;
+
+  color: white;
+}
+
+.image-card {
+
+  position: relative;
+
+  background:
+    rgba(255,255,255,0.05);
+
+  padding: 14px;
+
+  border-radius: 20px;
+
+  transition: 0.3s;
+}
+
+.image-card:hover {
+
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 0 20px rgba(155,92,255,0.4);
+}
+
+.image-category {
+
+  margin-top: 12px;
+
+  color: #d1c4ff;
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+}
+
+
 

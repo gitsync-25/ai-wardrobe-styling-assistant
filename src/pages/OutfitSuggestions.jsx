@@ -13,6 +13,9 @@ function OutfitSuggestions() {
   const [outfits, setOutfits] =
     useState([]);
 
+  const [occasionFilter, setOccasionFilter] =
+    useState("All");
+
   useEffect(() => {
 
     fetchWardrobe();
@@ -45,7 +48,10 @@ function OutfitSuggestions() {
     const shirts =
       data.filter(
         (item) =>
-          item.category === "Shirts"
+
+          item.category === "Shirts" ||
+
+          item.category === "T-Shirts"
       );
 
     const pants =
@@ -68,17 +74,45 @@ function OutfitSuggestions() {
 
         shoes.forEach((shoe) => {
 
-          combinations.push({
+          const goodMatch = true;
 
-            shirt,
-            pant,
-            shoe,
-          });
+          if (goodMatch) {
+
+            let score = 0;
+
+            if (
+              shirt.color !== pant.color
+            ) {
+
+              score += 5;
+            }
+
+            if (
+              shoe.color === "White"
+            ) {
+
+              score += 3;
+            }
+
+            combinations.push({
+
+              shirt,
+              pant,
+              shoe,
+
+              score,
+            });
+          }
         });
       });
     });
 
-    setOutfits(combinations);
+    const sortedOutfits =
+      combinations.sort(
+        (a, b) => b.score - a.score
+      );
+
+    setOutfits(sortedOutfits);
   };
 
   return (
@@ -93,37 +127,98 @@ function OutfitSuggestions() {
         AI-generated outfit combinations.
       </p>
 
+      <div className="filter-buttons">
+
+        <button
+          onClick={() =>
+            setOccasionFilter("All")
+          }
+        >
+          All
+        </button>
+
+        <button
+          onClick={() =>
+            setOccasionFilter("Casual")
+          }
+        >
+          Casual
+        </button>
+
+        <button
+          onClick={() =>
+            setOccasionFilter("Office")
+          }
+        >
+          Office
+        </button>
+
+        <button
+          onClick={() =>
+            setOccasionFilter("Party")
+          }
+        >
+          Party
+        </button>
+
+        <button
+          onClick={() =>
+            setOccasionFilter("Gym")
+          }
+        >
+          Gym
+        </button>
+
+      </div>
+
       <div className="outfits-grid">
 
         {
-          outfits.map(
-            (outfit, index) => (
+          outfits
+            .filter((outfit) =>
 
-            <div
-              key={index}
-              className="outfit-card"
-            >
+              occasionFilter === "All"
 
-              <img
-                src={outfit.shirt.image_url}
-                alt=""
-                className="outfit-image"
-              />
+                ? true
 
-              <img
-                src={outfit.pant.image_url}
-                alt=""
-                className="outfit-image"
-              />
+                : outfit.shirt.occasion ===
+                  occasionFilter
+            )
+            .map(
+              (outfit, index) => (
 
-              <img
-                src={outfit.shoe.image_url}
-                alt=""
-                className="outfit-image"
-              />
+                <div
+                  key={index}
+                  className="outfit-card"
+                >
 
-            </div>
-          ))
+                  <h3 className="outfit-score">
+
+                    Match Score:
+                    {outfit.score}/10
+
+                  </h3>
+
+                  <img
+                    src={outfit.shirt.image_url}
+                    alt=""
+                    className="outfit-image"
+                  />
+
+                  <img
+                    src={outfit.pant.image_url}
+                    alt=""
+                    className="outfit-image"
+                  />
+
+                  <img
+                    src={outfit.shoe.image_url}
+                    alt=""
+                    className="outfit-image"
+                  />
+
+                </div>
+              ))
         }
 
       </div>

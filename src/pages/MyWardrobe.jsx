@@ -18,6 +18,12 @@ function MyWardrobe() {
   const [filter, setFilter] =
   useState("All");
 
+  const [color, setColor] =
+  useState("Black");
+
+  const [occasion, setOccasion] =
+  useState("Casual");
+
 useEffect(() => {
 
   fetchImages();
@@ -55,6 +61,8 @@ const formattedImages =
 path: item.image_path,
 
 category: item.category,
+    color: item.color,
+    occasion: item.occasion,
 
   }));
 
@@ -107,6 +115,10 @@ setImages(formattedImages);
         image_path:
           fileName,
           category: category,
+
+          color: color,
+
+          occasion: occasion,
       }
     ]);
 
@@ -199,6 +211,12 @@ const handleDelete = async (path) => {
   </button>
 
   <button
+  onClick={() => setFilter("T-Shirts")}
+>
+  T-Shirts
+</button>
+
+  <button
     onClick={() => setFilter("Pants")}
   >
     Pants
@@ -233,6 +251,11 @@ const handleDelete = async (path) => {
   </option>
 
   <option>
+    T-Shirts
+  </option>
+
+
+  <option>
     Pants
   </option>
 
@@ -246,6 +269,66 @@ const handleDelete = async (path) => {
 
   <option>
     Accessories
+  </option>
+
+</select>
+
+<select
+  value={color}
+  onChange={(e) =>
+    setColor(e.target.value)
+  }
+  className="category-select"
+>
+
+  <option>
+    Black
+  </option>
+
+  <option>
+    White
+  </option>
+
+  <option>
+    Blue
+  </option>
+
+  <option>
+    Beige
+  </option>
+
+  <option>
+    Grey
+  </option>
+
+  <option>
+    Green
+  </option>
+
+</select>
+
+    <select
+  value={occasion}
+  onChange={(e) =>
+    setOccasion(e.target.value)
+  }
+  className="category-select"
+>
+
+  <option>
+    Casual
+  </option>
+
+  <option>
+    Office
+  </option>
+
+  <option>
+    Party
+  </option>
+
+  <option>
+    Gym
   </option>
 
 </select>
@@ -289,7 +372,17 @@ const handleDelete = async (path) => {
         />
 
           <p className="image-category">
+
   {img.category}
+
+•
+
+{img.color}
+
+•
+
+{img.occasion}
+
 </p>
 
         <button
