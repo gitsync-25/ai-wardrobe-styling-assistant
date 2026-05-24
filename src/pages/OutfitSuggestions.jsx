@@ -31,12 +31,14 @@ function OutfitSuggestions() {
       .from("wardrobe_items")
       .select("*");
 
-    if (error) {
+   if (error) {
 
-      console.log(error.message);
+  console.log(error);
 
-      return;
-    }
+  alert(error.message);
+
+  return;
+}
 
     setItems(data);
 
@@ -114,6 +116,52 @@ function OutfitSuggestions() {
 
     setOutfits(sortedOutfits);
   };
+
+  <button
+  className="favorite-btn"
+  onClick={() =>
+    saveOutfit(outfit)
+  }
+>
+
+  ❤️ Save
+
+</button>
+const saveOutfit = async (
+  outfit
+) => {
+
+  const { error } =
+    await supabase
+      .from("favorite_outfits")
+      .insert([
+        {
+
+          shirt_url:
+            outfit.shirt.image_url,
+
+          pant_url:
+            outfit.pant.image_url,
+
+          shoe_url:
+            outfit.shoe.image_url,
+        }
+      ]);
+
+  if (error) {
+
+    console.log(error);
+
+    alert(error.message);
+
+    return;
+  }
+
+  alert(
+    "Outfit saved ❤️"
+  );
+};
+
 
   return (
 
@@ -193,6 +241,16 @@ function OutfitSuggestions() {
                 >
 
                   <h3 className="outfit-score">
+                    <button
+  className="favorite-btn"
+  onClick={() =>
+    saveOutfit(outfit)
+  }
+>
+
+  ❤️ Save
+
+</button>
 
                     Match Score:
                     {outfit.score}/10

@@ -1,3 +1,4 @@
+import Favorites from "./pages/Favorites";
 import AuthRedirect from "./components/AuthRedirect";
 import Dashboard from "./pages/Dashboard";
 import MyWardrobe from "./pages/MyWardrobe";
@@ -90,6 +91,7 @@ function App() {
           }
         />
 
+
         <Route
           path="/login"
           element={
@@ -161,6 +163,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+  path="/favorites"
+  element={
+    <ProtectedRoute session={session}>
+
+      <Favorites />
+
+    </ProtectedRoute>
+  }
+/>
 
       </Routes>
 

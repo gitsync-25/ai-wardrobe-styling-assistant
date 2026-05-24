@@ -6,7 +6,9 @@ import {
 } from "react-router-dom";
 
 function Dashboard() {
-const location = useLocation();
+
+  const location = useLocation();
+
   return (
 
     <div className="dashboard-page">
@@ -19,71 +21,87 @@ const location = useLocation();
 
         <ul>
 
-  <li
-    className={
-      location.pathname === "/dashboard"
-        ? "active-sidebar-link"
-        : ""
-    }
-  >
+          <li
+            className={
+              location.pathname === "/dashboard"
+                ? "active-sidebar-link"
+                : ""
+            }
+          >
 
-    <Link to="/dashboard">
+            <Link to="/dashboard">
 
-      Dashboard
+              Dashboard
 
-    </Link>
+            </Link>
 
-  </li>
+          </li>
 
-  <li
-    className={
-      location.pathname === "/wardrobe"
-        ? "active-sidebar-link"
-        : ""
-    }
-  >
+          <li
+            className={
+              location.pathname === "/wardrobe"
+                ? "active-sidebar-link"
+                : ""
+            }
+          >
 
-    <Link to="/wardrobe">
+            <Link to="/wardrobe">
 
-      My Wardrobe
+              My Wardrobe
 
-    </Link>
+            </Link>
 
-  </li>
+          </li>
 
-  <li
-    className={
-      location.pathname === "/suggestions"
-        ? "active-sidebar-link"
-        : ""
-    }
-  >
+          <li
+            className={
+              location.pathname === "/suggestions"
+                ? "active-sidebar-link"
+                : ""
+            }
+          >
 
-    <Link to="/suggestions">
+            <Link to="/suggestions">
 
-      Outfit Suggestions
+              Outfit Suggestions
 
-    </Link>
+            </Link>
 
-  </li>
+          </li>
 
-  <li
-    className={
-      location.pathname === "/settings"
-        ? "active-sidebar-link"
-        : ""
-    }
-  >
+          <li
+            className={
+              location.pathname === "/favorites"
+                ? "active-sidebar-link"
+                : ""
+            }
+          >
 
-    <Link to="/settings">
+            <Link to="/favorites">
 
-      Settings
+              Favorites ❤️
 
-    </Link>
+            </Link>
 
-  </li>
+          </li>
 
-</ul>
+          <li
+            className={
+              location.pathname === "/settings"
+                ? "active-sidebar-link"
+                : ""
+            }
+          >
+
+            <Link to="/settings">
+
+              Settings
+
+            </Link>
+
+          </li>
+
+        </ul>
 
       </aside>
 
@@ -99,43 +117,43 @@ const location = useLocation();
 
         <div className="dashboard-cards">
 
-  <div className="dashboard-card">
+          <div className="dashboard-card">
 
-    <h3>
-      Total Outfits
-    </h3>
+            <h3>
+              Total Outfits
+            </h3>
 
-    <p>
-      12
-    </p>
+            <p>
+              12
+            </p>
 
-  </div>
+          </div>
 
-  <div className="dashboard-card">
+          <div className="dashboard-card">
 
-    <h3>
-      AI Suggestions
-    </h3>
+            <h3>
+              AI Suggestions
+            </h3>
 
-    <p>
-      48
-    </p>
+            <p>
+              48
+            </p>
 
-  </div>
+          </div>
 
-  <div className="dashboard-card">
+          <div className="dashboard-card">
 
-    <h3>
-      Wardrobe Items
-    </h3>
+            <h3>
+              Wardrobe Items
+            </h3>
 
-    <p>
-      34
-    </p>
+            <p>
+              34
+            </p>
 
-  </div>
+          </div>
 
-</div>
+        </div>
 
       </main>
 

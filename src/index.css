@@ -1962,6 +1962,36 @@ pointer-events: none;
 
   font-weight: 600;
 }
+.favorite-btn {
 
+  position: absolute;
+
+  top: 115px;
+
+  right: 65px;
+
+  background: crimson;
+
+  border: none;
+
+  color: white;
+
+  padding: 8px 14px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+}
+
+.favorite-btn:hover {
+
+  transform: scale(1.05);
+
+  background: #ff3366;
+}
 
 
