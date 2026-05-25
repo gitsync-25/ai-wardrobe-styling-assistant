@@ -1966,9 +1966,9 @@ pointer-events: none;
 
   position: absolute;
 
-  top: 115px;
+  top: 300px;
 
-  right: 65px;
+  right: 1px;
 
   background: crimson;
 
@@ -1992,6 +1992,42 @@ pointer-events: none;
   transform: scale(1.05);
 
   background: #ff3366;
+}
+
+.outfit-explanation {
+
+  color: #d6d6ff;
+
+  font-size: 0.85rem;
+
+  margin-bottom: 16px;
+
+  line-height: 1.5;
+
+  padding: 0 10px;
+}
+
+.outfit-badge {
+
+  background: linear-gradient(
+    135deg,
+    #7b2ff7,
+    #f107a3
+  );
+
+  display: inline-block;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  font-size: 0.9rem;
+
+  font-weight: 600;
+
+  margin-bottom: 14px;
+
+  color: white;
 }
 
 

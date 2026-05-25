@@ -45,6 +45,99 @@ function OutfitSuggestions() {
     generateOutfits(data);
   };
 
+  const generateBadge = (
+  shirt,
+  pant,
+  shoe
+) => {
+
+  if (
+    shirt.occasion === "Office"
+  ) {
+
+    return "💼 Office Ready";
+  }
+
+  if (
+    shirt.occasion === "Party"
+  ) {
+
+    return "🎉 Party Pick";
+  }
+
+  if (
+    shirt.occasion === "Gym"
+  ) {
+
+    return "🏋 Gym Combo";
+  }
+
+  if (
+    shoe.color === "White"
+  ) {
+
+    return "✨ Minimal Fit";
+  }
+
+  return "🔥 Trending";
+};
+
+const generateExplanation = (
+  shirt,
+  pant,
+  shoe
+) => {
+
+  let text = "";
+
+  if (
+    shirt.color !== pant.color
+  ) {
+
+    text +=
+      `${shirt.color} ${shirt.category} pairs nicely with ${pant.color} ${pant.category}. `;
+  }
+
+  if (
+    shoe.color === "White"
+  ) {
+
+    text +=
+      "White shoes add a clean modern finish. ";
+  }
+
+  if (
+    shirt.occasion === "Office"
+  ) {
+
+    text +=
+      "Perfect for professional office styling.";
+  }
+
+  else if (
+    shirt.occasion === "Party"
+  ) {
+
+    text +=
+      "Great choice for parties and evening outings.";
+  }
+
+  else if (
+    shirt.occasion === "Gym"
+  ) {
+
+    text +=
+      "Comfortable sporty combination for active wear.";
+  }
+
+  else {
+
+    text +=
+      "A stylish casual everyday outfit.";
+  }
+
+  return text;
+};
   const generateOutfits = (data) => {
 
     const shirts =
@@ -103,7 +196,21 @@ function OutfitSuggestions() {
               shoe,
 
               score,
-            });
+
+explanation:
+  generateExplanation(
+    shirt,
+    pant,
+    shoe
+  ),
+  badge:
+  generateBadge(
+    shirt,
+    pant,
+    shoe
+  ),
+            }
+          );
           }
         });
       });
@@ -240,6 +347,12 @@ const saveOutfit = async (
                   className="outfit-card"
                 >
 
+                            <div className="outfit-badge">
+
+  {outfit.badge}
+
+</div>
+
                   <h3 className="outfit-score">
                     <button
   className="favorite-btn"
@@ -256,6 +369,11 @@ const saveOutfit = async (
                     {outfit.score}/10
 
                   </h3>
+                    <p className="outfit-explanation">
+
+  {outfit.explanation}
+
+</p>
 
                   <img
                     src={outfit.shirt.image_url}
