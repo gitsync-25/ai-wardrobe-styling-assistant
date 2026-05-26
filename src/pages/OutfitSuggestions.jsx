@@ -5,16 +5,20 @@ import React, {
 
 import { supabase } from "../supabase";
 
-function OutfitSuggestions() {
+import {
+  generateFashionAdvice
+} from "../gemini";
 
-  const [items, setItems] =
-    useState([]);
+function OutfitSuggestions() {
 
   const [outfits, setOutfits] =
     useState([]);
 
   const [occasionFilter, setOccasionFilter] =
     useState("All");
+
+  const [loadingId, setLoadingId] =
+    useState(null);
 
   useEffect(() => {
 
@@ -31,134 +35,136 @@ function OutfitSuggestions() {
       .from("wardrobe_items")
       .select("*");
 
-   if (error) {
+    if (error) {
 
-  console.log(error);
+      console.log(error);
 
-  alert(error.message);
-
-  return;
-}
-
-    setItems(data);
+      return;
+    }
 
     generateOutfits(data);
   };
 
   const generateBadge = (
-  shirt,
-  pant,
-  shoe
-) => {
+    shirt,
+    shoe
+  ) => {
 
-  if (
-    shirt.occasion === "Office"
-  ) {
+    if (
+      shirt.occasion === "Office"
+    ) {
 
-    return "💼 Office Ready";
-  }
+      return "💼 Office Ready";
+    }
 
-  if (
-    shirt.occasion === "Party"
-  ) {
+    if (
+      shirt.occasion === "Party"
+    ) {
 
-    return "🎉 Party Pick";
-  }
+      return "🎉 Party Pick";
+    }
 
-  if (
-    shirt.occasion === "Gym"
-  ) {
+    if (
+      shirt.occasion === "Gym"
+    ) {
 
-    return "🏋 Gym Combo";
-  }
+      return "🏋 Gym Combo";
+    }
 
-  if (
-    shoe.color === "White"
-  ) {
+    if (
+      shoe.color === "White"
+    ) {
 
-    return "✨ Minimal Fit";
-  }
+      return "✨ Minimal Fit";
+    }
 
-  return "🔥 Trending";
-};
+    return "🔥 Trending";
+  };
 
-const generateExplanation = (
-  shirt,
-  pant,
-  shoe
-) => {
+  const generateExplanation = (
+    shirt,
+    pant,
+    shoe
+  ) => {
 
-  let text = "";
+    let text = "";
 
-  if (
-    shirt.color !== pant.color
-  ) {
+    if (
+      shirt.color !== pant.color
+    ) {
 
-    text +=
-      `${shirt.color} ${shirt.category} pairs nicely with ${pant.color} ${pant.category}. `;
-  }
+      text +=
+        `${shirt.color} ${shirt.category} pairs nicely with ${pant.color} ${pant.category}. `;
+    }
 
-  if (
-    shoe.color === "White"
-  ) {
+    if (
+      shoe.color === "White"
+    ) {
 
-    text +=
-      "White shoes add a clean modern finish. ";
-  }
+      text +=
+        "White shoes add a clean modern finish. ";
+    }
 
-  if (
-    shirt.occasion === "Office"
-  ) {
+    if (
+      shirt.occasion === "Office"
+    ) {
 
-    text +=
-      "Perfect for professional office styling.";
-  }
+      text +=
+        "Perfect for professional office styling.";
+    }
 
-  else if (
-    shirt.occasion === "Party"
-  ) {
+    else if (
+      shirt.occasion === "Party"
+    ) {
 
-    text +=
-      "Great choice for parties and evening outings.";
-  }
+      text +=
+        "Great choice for parties and evening outings.";
+    }
 
-  else if (
-    shirt.occasion === "Gym"
-  ) {
+    else if (
+      shirt.occasion === "Gym"
+    ) {
 
-    text +=
-      "Comfortable sporty combination for active wear.";
-  }
+      text +=
+        "Comfortable sporty combination for active wear.";
+    }
 
-  else {
+    else {
 
-    text +=
-      "A stylish casual everyday outfit.";
-  }
+      text +=
+        "A stylish casual everyday outfit.";
+    }
 
-  return text;
-};
-  const generateOutfits = (data) => {
+    return text;
+  };
+
+  const generateOutfits = (
+    data
+  ) => {
 
     const shirts =
       data.filter(
         (item) =>
 
-          item.category === "Shirts" ||
+          item.category ===
+            "Shirts" ||
 
-          item.category === "T-Shirts"
+          item.category ===
+            "T-Shirts"
       );
 
     const pants =
       data.filter(
         (item) =>
-          item.category === "Pants"
+          item.category ===
+          "Pants"
       );
 
     const shoes =
       data.filter(
         (item) =>
-          item.category === "Shoes"
+          item.category ===
+          "Shoes"
       );
 
     const combinations = [];
@@ -169,106 +175,158 @@ const generateExplanation = (
 
         shoes.forEach((shoe) => {
 
-          const goodMatch = true;
+          let score = 0;
 
-          if (goodMatch) {
+          if (
+            shirt.color !==
+            pant.color
+          ) {
 
-            let score = 0;
-
-            if (
-              shirt.color !== pant.color
-            ) {
-
-              score += 5;
-            }
-
-            if (
-              shoe.color === "White"
-            ) {
-
-              score += 3;
-            }
-
-            combinations.push({
-
-              shirt,
-              pant,
-              shoe,
-
-              score,
-
-explanation:
-  generateExplanation(
-    shirt,
-    pant,
-    shoe
-  ),
-  badge:
-  generateBadge(
-    shirt,
-    pant,
-    shoe
-  ),
-            }
-          );
+            score += 5;
           }
+
+          if (
+            shoe.color ===
+            "White"
+          ) {
+
+            score += 3;
+          }
+
+          combinations.push({
+
+            shirt,
+            pant,
+            shoe,
+
+            score,
+
+            badge:
+              generateBadge(
+                shirt,
+                shoe
+              ),
+
+            explanation:
+              generateExplanation(
+                shirt,
+                pant,
+                shoe
+              ),
+
+            aiText: "",
+          });
         });
       });
     });
 
-    const sortedOutfits =
-      combinations.sort(
-        (a, b) => b.score - a.score
-      );
+    combinations.sort(
+      (a, b) =>
+        b.score - a.score
+    );
 
-    setOutfits(sortedOutfits);
+    setOutfits(combinations);
   };
 
-  <button
-  className="favorite-btn"
-  onClick={() =>
-    saveOutfit(outfit)
-  }
->
+  const saveOutfit = async (
+    outfit
+  ) => {
 
-  ❤️ Save
+    const { error } =
+      await supabase
+        .from(
+          "favorite_outfits"
+        )
+        .insert([
+          {
 
-</button>
-const saveOutfit = async (
-  outfit
+            shirt_url:
+              outfit.shirt
+                .image_url,
+
+            pant_url:
+              outfit.pant
+                .image_url,
+
+            shoe_url:
+              outfit.shoe
+                .image_url,
+          },
+        ]);
+
+    if (error) {
+
+      alert(error.message);
+
+      return;
+    }
+
+    alert(
+      "Outfit saved ❤️"
+    );
+  };
+
+  const getAIAdvice = async (
+  outfit,
+  index
 ) => {
 
-  const { error } =
-    await supabase
-      .from("favorite_outfits")
-      .insert([
-        {
+  try {
 
-          shirt_url:
-            outfit.shirt.image_url,
+    setLoadingId(index);
 
-          pant_url:
-            outfit.pant.image_url,
+    const prompt = `
 
-          shoe_url:
-            outfit.shoe.image_url,
-        }
-      ]);
+Suggest a stylish fashion explanation for this outfit:
 
-  if (error) {
+Shirt:
+${outfit.shirt.color}
+${outfit.shirt.category}
+
+Pant:
+${outfit.pant.color}
+${outfit.pant.category}
+
+Shoes:
+${outfit.shoe.color}
+${outfit.shoe.category}
+
+Occasion:
+${outfit.shirt.occasion}
+
+Keep it short, modern, and stylish.
+`;
+
+    const response =
+      await generateFashionAdvice(
+        prompt
+      );
+
+    const updatedOutfits =
+      [...outfits];
+
+    updatedOutfits[index].aiText =
+      response;
+
+    setOutfits(
+      updatedOutfits
+    );
+  }
+
+  catch (error) {
 
     console.log(error);
 
-    alert(error.message);
-
-    return;
+    alert(
+      "Gemini AI failed 😭"
+    );
   }
 
-  alert(
-    "Outfit saved ❤️"
-  );
-};
+  finally {
 
+    setLoadingId(null);
+  }
+};
 
   return (
 
@@ -284,45 +342,29 @@ const saveOutfit = async (
 
       <div className="filter-buttons">
 
-        <button
-          onClick={() =>
-            setOccasionFilter("All")
-          }
-        >
-          All
-        </button>
+        {
+          [
+            "All",
+            "Casual",
+            "Office",
+            "Party",
+            "Gym",
+          ].map((type) => (
 
-        <button
-          onClick={() =>
-            setOccasionFilter("Casual")
-          }
-        >
-          Casual
-        </button>
+            <button
+              key={type}
+              onClick={() =>
+                setOccasionFilter(
+                  type
+                )
+              }
+            >
 
-        <button
-          onClick={() =>
-            setOccasionFilter("Office")
-          }
-        >
-          Office
-        </button>
+              {type}
 
-        <button
-          onClick={() =>
-            setOccasionFilter("Party")
-          }
-        >
-          Party
-        </button>
-
-        <button
-          onClick={() =>
-            setOccasionFilter("Gym")
-          }
-        >
-          Gym
-        </button>
+            </button>
+          ))
+        }
 
       </div>
 
@@ -330,71 +372,147 @@ const saveOutfit = async (
 
         {
           outfits
+
             .filter((outfit) =>
 
-              occasionFilter === "All"
+              occasionFilter ===
+              "All"
 
                 ? true
 
-                : outfit.shirt.occasion ===
+                : outfit.shirt
+                    .occasion ===
                   occasionFilter
             )
+
             .map(
-              (outfit, index) => (
+              (
+                outfit,
+                index
+              ) => (
 
                 <div
                   key={index}
                   className="outfit-card"
                 >
 
-                            <div className="outfit-badge">
+                  <div className="outfit-badge">
 
-  {outfit.badge}
+                    {outfit.badge}
 
-</div>
+                  </div>
 
                   <h3 className="outfit-score">
-                    <button
-  className="favorite-btn"
-  onClick={() =>
-    saveOutfit(outfit)
-  }
->
-
-  ❤️ Save
-
-</button>
 
                     Match Score:
+                    {" "}
                     {outfit.score}/10
 
                   </h3>
-                    <p className="outfit-explanation">
 
-  {outfit.explanation}
+                  <p className="outfit-explanation">
 
-</p>
+                    {
+                      outfit.explanation
+                    }
 
-                  <img
-                    src={outfit.shirt.image_url}
-                    alt=""
-                    className="outfit-image"
-                  />
+                  </p>
 
-                  <img
-                    src={outfit.pant.image_url}
-                    alt=""
-                    className="outfit-image"
-                  />
+                  <div className="favorite-images">
 
-                  <img
-                    src={outfit.shoe.image_url}
-                    alt=""
-                    className="outfit-image"
-                  />
+                    <img
+                      src={
+                        outfit.shirt
+                          .image_url
+                      }
+                      alt=""
+                      className="outfit-image"
+                    />
+
+                    <img
+                      src={
+                        outfit.pant
+                          .image_url
+                      }
+                      alt=""
+                      className="outfit-image"
+                    />
+
+                    <img
+                      src={
+                        outfit.shoe
+                          .image_url
+                      }
+                      alt=""
+                      className="outfit-image"
+                    />
+
+                  </div>
+
+                  <div
+                    style={{
+                      marginTop:
+                        "18px",
+                      display:
+                        "flex",
+                      gap: "10px",
+                      justifyContent:
+                        "center",
+                    }}
+                  >
+
+                    <button
+                      className="favorite-btn"
+                      onClick={() =>
+                        saveOutfit(
+                          outfit
+                        )
+                      }
+                    >
+
+                      ❤️ Save
+
+                    </button>
+
+                    <button
+                      className="ai-btn"
+                      onClick={() =>
+                        getAIAdvice(
+                          outfit,
+                          index
+                        )
+                      }
+                    >
+
+                      {
+                        loadingId ===
+                        index
+
+                          ? "Thinking..."
+
+                          : "🤖 AI Advice"
+                      }
+
+                    </button>
+
+                  </div>
+
+                  {
+                    outfit.aiText && (
+
+                      <div className="ai-response">
+
+                        {
+                          outfit.aiText
+                        }
+
+                      </div>
+                    )
+                  }
 
                 </div>
-              ))
+              )
+            )
         }
 
       </div>
