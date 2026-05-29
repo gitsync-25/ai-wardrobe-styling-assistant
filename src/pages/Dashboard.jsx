@@ -1,13 +1,66 @@
-import React from "react";
+import React, {
+  useEffect,
+  useState
+} from "react";
 
 import {
   useLocation,
   Link
 } from "react-router-dom";
 
+import { supabase } from "../supabase";
+
 function Dashboard() {
 
-  const location = useLocation();
+  const location =
+    useLocation();
+
+  const [wardrobeCount,
+    setWardrobeCount] =
+    useState(0);
+
+  const [favoriteCount,
+    setFavoriteCount] =
+    useState(0);
+
+  useEffect(() => {
+
+    fetchStats();
+
+  }, []);
+
+  const fetchStats = async () => {
+
+    const {
+      count: wardrobeItems
+    } = await supabase
+
+      .from("wardrobe_items")
+
+      .select("*", {
+        count: "exact",
+        head: true,
+      });
+
+    const {
+      count: favoriteItems
+    } = await supabase
+
+      .from("favorite_outfits")
+
+      .select("*", {
+        count: "exact",
+        head: true,
+      });
+
+    setWardrobeCount(
+      wardrobeItems || 0
+    );
+
+    setFavoriteCount(
+      favoriteItems || 0
+    );
+  };
 
   return (
 
@@ -23,8 +76,11 @@ function Dashboard() {
 
           <li
             className={
-              location.pathname === "/dashboard"
+              location.pathname ===
+              "/dashboard"
+
                 ? "active-sidebar-link"
+
                 : ""
             }
           >
@@ -39,8 +95,11 @@ function Dashboard() {
 
           <li
             className={
-              location.pathname === "/wardrobe"
+              location.pathname ===
+              "/wardrobe"
+
                 ? "active-sidebar-link"
+
                 : ""
             }
           >
@@ -55,8 +114,11 @@ function Dashboard() {
 
           <li
             className={
-              location.pathname === "/suggestions"
+              location.pathname ===
+              "/suggestions"
+
                 ? "active-sidebar-link"
+
                 : ""
             }
           >
@@ -71,8 +133,11 @@ function Dashboard() {
 
           <li
             className={
-              location.pathname === "/favorites"
+              location.pathname ===
+              "/favorites"
+
                 ? "active-sidebar-link"
+
                 : ""
             }
           >
@@ -87,8 +152,11 @@ function Dashboard() {
 
           <li
             className={
-              location.pathname === "/settings"
+              location.pathname ===
+              "/settings"
+
                 ? "active-sidebar-link"
+
                 : ""
             }
           >
@@ -120,35 +188,41 @@ function Dashboard() {
           <div className="dashboard-card">
 
             <h3>
-              Total Outfits
-            </h3>
-
-            <p>
-              12
-            </p>
-
-          </div>
-
-          <div className="dashboard-card">
-
-            <h3>
-              AI Suggestions
-            </h3>
-
-            <p>
-              48
-            </p>
-
-          </div>
-
-          <div className="dashboard-card">
-
-            <h3>
               Wardrobe Items
             </h3>
 
             <p>
-              34
+
+              {wardrobeCount}
+
+            </p>
+
+          </div>
+
+          <div className="dashboard-card">
+
+            <h3>
+              Favorite Outfits
+            </h3>
+
+            <p>
+
+              {favoriteCount}
+
+            </p>
+
+          </div>
+
+          <div className="dashboard-card">
+
+            <h3>
+              AI Ready
+            </h3>
+
+            <p>
+
+              🚀
+
             </p>
 
           </div>
