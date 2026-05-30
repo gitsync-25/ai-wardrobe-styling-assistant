@@ -6,8 +6,8 @@ import React, {
 import { supabase } from "../supabase";
 
 import {
-  generateFashionAdvice
-} from "../gemini";
+  getStyleAdvice
+} from "../services/openrouter";
 
 function OutfitSuggestions() {
 
@@ -297,10 +297,49 @@ ${outfit.shirt.occasion}
 Keep it short, modern, and stylish.
 `;
 
+    const getAIAdvice = async (
+  outfit,
+  index
+) => {
+
+  try {
+
+    setLoadingId(index);
+
     const response =
-      await generateFashionAdvice(
-        prompt
-      );
+  await getStyleAdvice({
+    top: `${outfit.shirt.color} ${outfit.shirt.category}`,
+    bottom: `${outfit.pant.color} ${outfit.pant.category}`,
+    shoes: `${outfit.shoe.color} ${outfit.shoe.category}`,
+    occasion: outfit.shirt.occasion,
+    score: outfit.score,
+  });
+
+    const updatedOutfits =
+      [...outfits];
+
+    updatedOutfits[index].aiText =
+      response;
+
+    setOutfits(
+      updatedOutfits
+    );
+
+  } catch (error) {
+    
+
+    console.log(error);
+
+    alert(
+      "AI Advice Failed"
+    );
+
+  } finally {
+
+    setLoadingId(null);
+
+  }
+};
 
     const updatedOutfits =
       [...outfits];
@@ -317,9 +356,7 @@ Keep it short, modern, and stylish.
 
     console.log(error);
 
-    alert(
-      "Gemini AI failed 😭"
-    );
+    alert(error.message);
   }
 
   finally {
@@ -478,6 +515,7 @@ Keep it short, modern, and stylish.
                       className="ai-btn"
                       onClick={() =>
                         getAIAdvice(
+                          console.log("AI BUTTON CLICKED");
                           outfit,
                           index
                         )

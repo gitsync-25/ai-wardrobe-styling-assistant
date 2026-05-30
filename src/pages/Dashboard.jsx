@@ -3,6 +3,8 @@ import React, {
   useState
 } from "react";
 
+
+
 import {
   useLocation,
   Link
@@ -23,11 +25,17 @@ function Dashboard() {
     setFavoriteCount] =
     useState(0);
 
+  const [recentItems,
+    setRecentItems] =
+    useState([]);
+
   useEffect(() => {
 
-    fetchStats();
+  fetchStats();
 
-  }, []);
+
+
+}, []);
 
   const fetchStats = async () => {
 
@@ -53,12 +61,33 @@ function Dashboard() {
         head: true,
       });
 
+    const {
+      data: recentData
+    } = await supabase
+
+      .from("wardrobe_items")
+
+      .select("*")
+
+      .order(
+        "created_at",
+        {
+          ascending: false,
+        }
+      )
+
+      .limit(3);
+
     setWardrobeCount(
       wardrobeItems || 0
     );
 
     setFavoriteCount(
       favoriteItems || 0
+    );
+
+    setRecentItems(
+      recentData || []
     );
   };
 
@@ -192,9 +221,7 @@ function Dashboard() {
             </h3>
 
             <p>
-
               {wardrobeCount}
-
             </p>
 
           </div>
@@ -206,9 +233,7 @@ function Dashboard() {
             </h3>
 
             <p>
-
               {favoriteCount}
-
             </p>
 
           </div>
@@ -220,10 +245,54 @@ function Dashboard() {
             </h3>
 
             <p>
-
               🚀
-
             </p>
+
+          </div>
+
+        </div>
+
+        <div className="recent-uploads">
+
+          <h2>
+            Recent Uploads 🧥
+          </h2>
+
+          <div className="recent-grid">
+
+            {recentItems.map(
+              (item) => (
+
+                <div
+                  key={item.id}
+                  className="recent-card"
+                >
+
+                  <img
+                    src={
+                      item.image_url
+                    }
+                    alt=""
+                    className="recent-image"
+                  />
+
+                  <h4>
+                    {item.category}
+                  </h4>
+
+                  <p>
+
+                    {item.color}
+
+                    {" • "}
+
+                    {item.occasion}
+
+                  </p>
+
+                </div>
+              )
+            )}
 
           </div>
 
