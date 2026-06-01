@@ -275,45 +275,24 @@ function OutfitSuggestions() {
 
     setLoadingId(index);
 
-    const prompt = `
-
-Suggest a stylish fashion explanation for this outfit:
-
-Shirt:
-${outfit.shirt.color}
-${outfit.shirt.category}
-
-Pant:
-${outfit.pant.color}
-${outfit.pant.category}
-
-Shoes:
-${outfit.shoe.color}
-${outfit.shoe.category}
-
-Occasion:
-${outfit.shirt.occasion}
-
-Keep it short, modern, and stylish.
-`;
-
-    const getAIAdvice = async (
-  outfit,
-  index
-) => {
-
-  try {
-
-    setLoadingId(index);
-
     const response =
-  await getStyleAdvice({
-    top: `${outfit.shirt.color} ${outfit.shirt.category}`,
-    bottom: `${outfit.pant.color} ${outfit.pant.category}`,
-    shoes: `${outfit.shoe.color} ${outfit.shoe.category}`,
-    occasion: outfit.shirt.occasion,
-    score: outfit.score,
-  });
+      await getStyleAdvice({
+
+        top:
+          `${outfit.shirt.color} ${outfit.shirt.category}`,
+
+        bottom:
+          `${outfit.pant.color} ${outfit.pant.category}`,
+
+        shoes:
+          `${outfit.shoe.color} ${outfit.shoe.category}`,
+
+        occasion:
+          outfit.shirt.occasion,
+
+        score:
+          outfit.score,
+      });
 
     const updatedOutfits =
       [...outfits];
@@ -326,11 +305,11 @@ Keep it short, modern, and stylish.
     );
 
   } catch (error) {
-    
 
-    console.log(error);
+    console.error(error);
 
     alert(
+      error.message ||
       "AI Advice Failed"
     );
 
@@ -338,30 +317,6 @@ Keep it short, modern, and stylish.
 
     setLoadingId(null);
 
-  }
-};
-
-    const updatedOutfits =
-      [...outfits];
-
-    updatedOutfits[index].aiText =
-      response;
-
-    setOutfits(
-      updatedOutfits
-    );
-  }
-
-  catch (error) {
-
-    console.log(error);
-
-    alert(error.message);
-  }
-
-  finally {
-
-    setLoadingId(null);
   }
 };
 
@@ -515,7 +470,7 @@ Keep it short, modern, and stylish.
                       className="ai-btn"
                       onClick={() =>
                         getAIAdvice(
-                          console.log("AI BUTTON CLICKED");
+                          
                           outfit,
                           index
                         )

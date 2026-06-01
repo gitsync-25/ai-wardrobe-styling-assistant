@@ -10,37 +10,16 @@ export async function getStyleAdvice(outfit) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-20b:free",
+        model: "meta-llama/llama-3.3-8b-instruct:free",
         messages: [
           {
             role: "user",
             content: `
-You are a professional fashion stylist.
+Top: ${outfit.top}
+Bottom: ${outfit.bottom}
+Shoes: ${outfit.shoes}
 
-Analyze this outfit:
-
-Top:
-${outfit.top}
-
-Bottom:
-${outfit.bottom}
-
-Shoes:
-${outfit.shoes}
-
-Occasion:
-${outfit.occasion}
-
-Match Score:
-${outfit.score}/10
-
-Give:
-- Style category
-- Why it works
-- Best occasion
-- One improvement
-
-Keep it under 80 words.
+Give short fashion advice.
 `
           }
         ]
@@ -48,7 +27,22 @@ Keep it under 80 words.
     }
   );
 
+  
+
   const data = await response.json();
+
+console.log(
+  "OPENROUTER RESPONSE:",
+  data
+);
+
+if (!response.ok) {
+  throw new Error(
+    JSON.stringify(data)
+  );
+}
+
+  
 
   return data.choices[0].message.content;
 }
