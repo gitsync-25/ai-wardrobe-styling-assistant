@@ -256,7 +256,12 @@ function OutfitSuggestions() {
 
     if (error) {
 
-      alert(error.message);
+      const updatedOutfits = [...outfits];
+
+updatedOutfits[index].aiText =
+  "🤖 AI Stylist is temporarily unavailable. Please try again later.";
+
+setOutfits(updatedOutfits);
 
       return;
     }

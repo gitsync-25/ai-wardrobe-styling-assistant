@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from '../components/Navbar'
@@ -136,7 +137,10 @@ useEffect(() => {
   session={session}
 />
 
- <div className="home-container page-center">
+<div
+  className="home-container page-center"
+  id="home"
+>
   <div className="particles">
 
   <span></span>
@@ -192,14 +196,53 @@ useEffect(() => {
       and elevate your personal style with AI-powered assistance.
     </motion.p>
 
-    <motion.button
-  initial={{ opacity: 0, scale: 0.8 }}
-  animate={{ opacity: 1, scale: 1 }}
-  transition={{ duration: 0.6, delay: 0.6 }}
->
-  Get Started →
+    {session ? (
 
-</motion.button>
+  <Link to="/dashboard">
+
+    <motion.button
+      initial={{
+        opacity: 0,
+        scale: 0.8
+      }}
+      animate={{
+        opacity: 1,
+        scale: 1
+      }}
+      transition={{
+        duration: 0.6,
+        delay: 0.6
+      }}
+    >
+      🚀 Open Dashboard
+    </motion.button>
+
+  </Link>
+
+) : (
+
+  <Link to="/login">
+
+    <motion.button
+      initial={{
+        opacity: 0,
+        scale: 0.8
+      }}
+      animate={{
+        opacity: 1,
+        scale: 1
+      }}
+      transition={{
+        duration: 0.6,
+        delay: 0.6
+      }}
+    >
+      Get Started →
+    </motion.button>
+
+  </Link>
+
+)}
   </div>
   <div className="stats-section">
 
@@ -221,7 +264,10 @@ useEffect(() => {
 </div>
 </div>
 
-<section className="features-section">
+<section
+  className="features-section"
+  id="features"
+>
 
   <h2>Powerful AI Fashion Features</h2>
 
@@ -287,6 +333,27 @@ useEffect(() => {
 
 </section>
 
+<section
+  className="about-section"
+  id="about"
+>
+
+  <h2>About AI Wardrobe</h2>
+
+  <p>
+    AI Wardrobe Styling Assistant is a smart fashion platform designed to help users organize their wardrobe, discover outfit combinations, and simplify everyday styling decisions.
+  </p>
+
+  <p>
+    Users can upload clothing items, manage their digital wardrobe, generate outfit suggestions, save favorite looks, and receive personalized styling recommendations.
+  </p>
+
+  <p>
+    Built with React, Supabase, and modern AI technologies, the platform aims to make fashion more organized and accessible.
+  </p>
+
+</section>
+
 <motion.footer
 
   className="footer"
@@ -335,17 +402,40 @@ useEffect(() => {
 
   <div className="footer-socials">
 
-    <h3>Follow Us</h3>
+  <h3>Follow Us</h3>
 
-    <div className="social-icons">
+  <div className="social-icons">
 
-      <span>📸</span>
-      <span>🐦</span>
-      <span>💼</span>
+    <a
+      href="https://instagram.com/vaebhav_25"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Instagram"
+    >
+      📸
+    </a>
 
-    </div>
+    <a
+      href="https://www.linkedin.com/in/vaebhav25/"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="LinkedIn"
+    >
+      🐦
+    </a>
+
+    <a
+      href="https://github.com/gitsync-25"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="GitHub"
+    >
+      💼
+    </a>
 
   </div>
+
+</div>
 
 </motion.footer>
 

@@ -10,7 +10,7 @@ export async function getStyleAdvice(outfit) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.3-8b-instruct:free",
+        model: "openai/gpt-oss-20b:free",
         messages: [
           {
             role: "user",
