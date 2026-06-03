@@ -1,3 +1,5 @@
+const [username, setUsername] = useState("");
+
 import React, {
   useEffect,
   useState
@@ -31,7 +33,10 @@ function Dashboard() {
 
   useEffect(() => {
 
+
+    
   fetchStats();
+  
 
 
 
@@ -39,57 +44,57 @@ function Dashboard() {
 
   const fetchStats = async () => {
 
-    const {
-      count: wardrobeItems
-    } = await supabase
+    
 
-      .from("wardrobe_items")
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
 
-      .select("*", {
-        count: "exact",
-        head: true,
-      });
+  if (!user) return;
 
-    const {
-      count: favoriteItems
-    } = await supabase
+  const {
+    count: wardrobeItems
+  } = await supabase
+    .from("wardrobe_items")
+    .select("*", {
+      count: "exact",
+      head: true,
+    })
+    .eq("user_id", user.id);
 
-      .from("favorite_outfits")
+  const {
+    count: favoriteItems
+  } = await supabase
+    .from("favorite_outfits")
+    .select("*", {
+      count: "exact",
+      head: true,
+    })
+    .eq("user_id", user.id);
 
-      .select("*", {
-        count: "exact",
-        head: true,
-      });
+  const {
+    data: recentData
+  } = await supabase
+    .from("wardrobe_items")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(3);
 
-    const {
-      data: recentData
-    } = await supabase
+  setWardrobeCount(
+    wardrobeItems || 0
+  );
 
-      .from("wardrobe_items")
+  setFavoriteCount(
+    favoriteItems || 0
+  );
 
-      .select("*")
-
-      .order(
-        "created_at",
-        {
-          ascending: false,
-        }
-      )
-
-      .limit(3);
-
-    setWardrobeCount(
-      wardrobeItems || 0
-    );
-
-    setFavoriteCount(
-      favoriteItems || 0
-    );
-
-    setRecentItems(
-      recentData || []
-    );
-  };
+  setRecentItems(
+    recentData || []
+  );
+};
 
   return (
 

@@ -18,32 +18,44 @@ function Favorites() {
 
   const fetchFavorites = async () => {
 
-    const {
-      data,
-      error
-    } = await supabase
-      .from("favorite_outfits")
-      .select("*");
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
 
-    if (error) {
+  if (!user) return;
 
-      console.log(error.message);
+  const {
+    data,
+    error
+  } = await supabase
+    .from("favorite_outfits")
+    .select("*")
+    .eq("user_id", user.id);
 
-      return;
-    }
+  if (error) {
 
-    setFavorites(data);
-  };
+    console.log(error.message);
+
+    return;
+  }
+
+  setFavorites(data || []);
+};
 
   const deleteFavorite = async (
     id
   ) => {
 
-    const { error } =
-      await supabase
-        .from("favorite_outfits")
-        .delete()
-        .eq("id", id);
+    const {
+  data: { user }
+} = await supabase.auth.getUser();
+
+const { error } =
+  await supabase
+    .from("favorite_outfits")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
 
     if (error) {
 

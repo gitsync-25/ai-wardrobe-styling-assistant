@@ -29,11 +29,16 @@ function OutfitSuggestions() {
   const fetchWardrobe = async () => {
 
     const {
-      data,
-      error
-    } = await supabase
-      .from("wardrobe_items")
-      .select("*");
+  data: { user }
+} = await supabase.auth.getUser();
+
+const {
+  data,
+  error
+} = await supabase
+  .from("wardrobe_items")
+  .select("*")
+  .eq("user_id", user.id);
 
     if (error) {
 
@@ -231,6 +236,9 @@ function OutfitSuggestions() {
   const saveOutfit = async (
     outfit
   ) => {
+    const {
+  data: { user }
+} = await supabase.auth.getUser();
 
     const { error } =
       await supabase
@@ -238,33 +246,26 @@ function OutfitSuggestions() {
           "favorite_outfits"
         )
         .insert([
-          {
+  {
+    user_id: user.id,
 
-            shirt_url:
-              outfit.shirt
-                .image_url,
+    shirt_url:
+      outfit.shirt.image_url,
 
-            pant_url:
-              outfit.pant
-                .image_url,
+    pant_url:
+      outfit.pant.image_url,
 
-            shoe_url:
-              outfit.shoe
-                .image_url,
-          },
-        ]);
+    shoe_url:
+      outfit.shoe.image_url,
+  },
+]);
 
     if (error) {
 
-      const updatedOutfits = [...outfits];
+  alert(error.message);
 
-updatedOutfits[index].aiText =
-  "🤖 AI Stylist is temporarily unavailable. Please try again later.";
-
-setOutfits(updatedOutfits);
-
-      return;
-    }
+  return;
+}
 
     alert(
       "Outfit saved ❤️"

@@ -33,14 +33,19 @@ useEffect(() => {
 const fetchImages = async () => {
 
   const {
-    data,
-    error
-  } = await supabase
-    .from("wardrobe_items")
-    .select("*")
-    .order("created_at", {
-      ascending: false,
-    });
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  const {
+  data,
+  error
+} = await supabase
+  .from("wardrobe_items")
+  .select("*")
+  .eq("user_id", user.id)
+  .order("created_at", {
+    ascending: false,
+  });
 
   if (error) {
 
@@ -101,26 +106,34 @@ setImages(formattedImages);
   const {
     data: publicUrlData
   } = supabase.storage
+  
       .from("wardrobe-images")
       .getPublicUrl(fileName);
+
+      const {
+  data: { user }
+} = await supabase.auth.getUser();
 
      const { error: dbError } =
   await supabase
     .from("wardrobe_items")
     .insert([
-      {
-        image_url:
-          publicUrlData.publicUrl,
+  {
+    user_id: user.id,
 
-        image_path:
-          fileName,
-          category: category,
+    image_url:
+      publicUrlData.publicUrl,
 
-          color: color,
+    image_path:
+      fileName,
 
-          occasion: occasion,
-      }
-    ]);
+    category: category,
+
+    color: color,
+
+    occasion: occasion,
+  }
+]);
 
 if (dbError) {
 
@@ -163,11 +176,16 @@ const handleDelete = async (path) => {
     return;
   }
 
-  const { error: dbError } =
-    await supabase
-      .from("wardrobe_items")
-      .delete()
-      .eq("image_path", path);
+  const {
+  data: { user }
+} = await supabase.auth.getUser();
+
+const { error: dbError } =
+  await supabase
+    .from("wardrobe_items")
+    .delete()
+    .eq("image_path", path)
+    .eq("user_id", user.id);
 
   if (dbError) {
 
