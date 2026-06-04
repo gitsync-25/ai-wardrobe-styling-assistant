@@ -1,4 +1,4 @@
-const [username, setUsername] = useState("");
+
 
 import React, {
   useEffect,
@@ -31,6 +31,10 @@ function Dashboard() {
     setRecentItems] =
     useState([]);
 
+    const [username,
+  setUsername] =
+  useState("");
+
   useEffect(() => {
 
 
@@ -51,6 +55,13 @@ function Dashboard() {
   } = await supabase.auth.getUser();
 
   if (!user) return;
+
+  setUsername(
+  user.user_metadata?.username ||
+  user.user_metadata?.full_name ||
+  user.email?.split("@")[0] ||
+  "User"
+);
 
   const {
     count: wardrobeItems
@@ -210,8 +221,8 @@ function Dashboard() {
       <main className="dashboard-content">
 
         <h1>
-          Welcome Back 🔥
-        </h1>
+  Welcome Back, {username} 🔥
+</h1>
 
         <p>
           Your AI fashion assistant is ready.
